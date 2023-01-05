@@ -15,6 +15,7 @@ import { style } from '@angular/animations';
 export class RepoSidenevComponent implements OnInit {
   openIssueNotAavail: boolean = false;
   openIssueAavail:boolean = true;
+  localData: any;
   constructor(private api : ApiService,
     private toastr: ToastrService,) { }
 
@@ -49,14 +50,28 @@ open:boolean = true
 close:boolean = false
 closeHeader: boolean = true;
 giveError:any[] = []
-value:any
+value:any[] = []
+localName:any;
+
 
 
   ngOnInit(): void {
-    this.value = JSON.parse(localStorage.getItem('repo')!)
+    this.value = JSON.parse(localStorage.getItem('repo')! || "{}")
     if(this.value) {
-      this.repoNameGet = this.value
+      this.repoNameGet = [...this.value];
+
+      console.log(this.repoNameGet)
+      // this.value.push(this.repoNameGet)
+      // console.log(typeof(this.repoNameGet));
+
     }
+    // this.localName = this.value
+    // console.log(typeof(this.value));
+    // this.localName.forEach((element:any) => {
+    //   console.log(element)
+    //   this.localName.push(element)
+    // });
+
   }
 
   openBranch(val:any){
@@ -176,23 +191,28 @@ value:any
   }
 
   clickedRepo(){
-  console.log('function called')
-  console.log(this.getEevent)
-  this.arrList.push(this.getEevent);
-  console.log("rrrrrrrrr",this.arrList);
+  // console.log('function called')
+  // console.log(this.getEevent)
+  this.repoNameGet.push(this.getEevent);
+  // console.log("rrrrrrrrr",this.arrList);
 
 
-  this.value = this.arrList
-  localStorage.setItem('repo',JSON.stringify(this.value))
-  //  this.repoName = window.localStorage.getItem('repo')
-    console.log(this.repoNameGet)
-    // localStorage.setItem('repo',JSON.stringify(this.repoNameGet))
-   this.value = JSON.parse(localStorage.getItem('repo')!)
-    if(this.value) {
-      this.repoNameGet = this.value
-    }
-    // this.deleteRepo();
+  // this.value = this.arrList
+  localStorage.setItem('repo',JSON.stringify(this.repoNameGet));
+  //   console.log(this.repoNameGet)
+  //  this.value = JSON.parse(localStorage.getItem('repo')!)
+  //   if(this.value) {
+  //     this.repoNameGet = this.value
+  //   }
 
+
+    // this.value.forEach((element:any) => {
+    //   console.log(element)
+    //   this.localData = element
+    //   if(this.localData) {
+    //     this.repoNameGet = this.localData
+    //   }
+    //  });
   }
 
 
@@ -234,8 +254,18 @@ value:any
   }
 
   deleteRepo(){
-    localStorage.removeItem('repo')
-    window.location.reload()
+    if(localStorage.getItem('repo')){
+      let localStorage_data = [...JSON.parse(localStorage.getItem('repo')!)];
+      localStorage_data.filter((ele: any, index: number)=>{
+        if(ele == this.repoNameuser){
+          localStorage_data.splice(index, 1);
+        }
+      });
+      localStorage.setItem('repo', JSON.stringify(localStorage_data));
+      let index = this.repoNameGet.indexOf(this.repoNameuser);
+      this.repoNameGet.splice(index, 1);
+      this.branch = !this.branch
+    }
   }
 
   openSideBar(){

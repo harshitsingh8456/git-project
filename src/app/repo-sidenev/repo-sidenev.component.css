@@ -1,3 +1,4 @@
+
 .left-side {
   height: 100vh;
 }
@@ -803,4 +804,8 @@ hover {
 
 .button3:hover {
   border-radius: 30px;
+}
+.branchrepo{
+  height: 20rem;
+  overflow-y: scroll;
 }
