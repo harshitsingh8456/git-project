@@ -57,7 +57,7 @@ localName:any;
 
   ngOnInit(): void {
     this.value = JSON.parse(localStorage.getItem('repo')! || "{}")
-    if(this.value) {
+    if(this.value.length > 0) {
       this.repoNameGet = [...this.value];
 
       console.log(this.repoNameGet)
